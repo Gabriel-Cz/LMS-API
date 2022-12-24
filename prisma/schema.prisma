@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Instructor {
+  id      String   @id @db.VarChar
+  userId  String?  @unique @db.VarChar
+  User    User?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Learner Learner?
+  Lecture Lecture?
+}
+
+model Learner {
+  id           String      @id @db.VarChar
+  userId       String?     @unique @db.VarChar
+  instructorId String?     @unique @db.VarChar
+  Instructor   Instructor? @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User         User?       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Lecture      Lecture?
+}
+
+model Lecture {
+  id           String       @id @db.VarChar
+  instructorId String?      @unique @db.VarChar
+  learnerId    String?      @unique @db.VarChar
+  name         String       @db.VarChar
+  description  String?      @db.VarChar
+  subject      subjecttype?
+  createdAt    DateTime?    @default(now()) @db.Timestamp(6)
+  Instructor   Instructor?  @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Learner      Learner?     @relation(fields: [learnerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Test         Test?
+}
+
+model Phone {
+  id        String    @id @db.VarChar
+  profileId String?   @unique @db.VarChar
+  number    String    @db.VarChar
+  phoneType phonetype
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  Profile   Profile?  @relation(fields: [profileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Profile {
+  id          String    @id @db.VarChar
+  userId      String?   @unique @db.VarChar
+  first_name  String    @db.VarChar
+  second_name String    @db.VarChar
+  createdAt   DateTime? @default(now()) @db.Timestamp(6)
+  Phone       Phone?
+  User        User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Question {
+  id          String  @id @db.VarChar
+  testId      String? @unique @db.VarChar
+  description String? @db.VarChar
+  answer      String? @db.VarChar
+  Test        Test?   @relation(fields: [testId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Test {
+  id          String    @id @db.VarChar
+  name        String    @db.VarChar
+  description String?   @db.VarChar
+  lectureId   String?   @unique @db.VarChar
+  createdAt   DateTime? @default(now()) @db.Timestamp(6)
+  Question    Question?
+  Lecture     Lecture?  @relation(fields: [lectureId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model User {
+  id         String      @id @db.VarChar
+  email      String      @unique @db.VarChar
+  password   String      @db.VarChar
+  role       userrole?
+  createdAt  DateTime?   @default(now()) @db.Timestamp(6)
+  Instructor Instructor?
+  Learner    Learner?
+  Profile    Profile?
+}
+
+enum phonetype {
+  HOME
+  MOBILE
+  OFFICE
+}
+
+enum subjecttype {
+  BIOLOGY
+  MATHS
+  SOCIAL_SCIENCE
+}
+
+enum userrole {
+  ADMIN
+  CLIENT
+  GUEST
+}
