@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Instructor {
-  id      String   @id @db.VarChar
+  id      String   @id @default(uuid())
   userId  String?  @unique @db.VarChar
   User    User?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Learner Learner?
@@ -16,7 +16,7 @@ model Instructor {
 }
 
 model Learner {
-  id           String      @id @db.VarChar
+  id           String      @id @default(uuid())
   userId       String?     @unique @db.VarChar
   instructorId String?     @unique @db.VarChar
   Instructor   Instructor? @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -25,12 +25,12 @@ model Learner {
 }
 
 model Lecture {
-  id           String       @id @db.VarChar
+  id           String       @id @default(uuid())
   instructorId String?      @unique @db.VarChar
   learnerId    String?      @unique @db.VarChar
   name         String       @db.VarChar
   description  String?      @db.VarChar
-  subject      subjecttype?
+  subject      SubjectType
   createdAt    DateTime?    @default(now()) @db.Timestamp(6)
   Instructor   Instructor?  @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Learner      Learner?     @relation(fields: [learnerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -38,16 +38,16 @@ model Lecture {
 }
 
 model Phone {
-  id        String    @id @db.VarChar
+  id        String    @id @default(uuid())
   profileId String?   @unique @db.VarChar
   number    String    @db.VarChar
-  phoneType phonetype
+  phoneType Phonetype
   createdAt DateTime? @default(now()) @db.Timestamp(6)
   Profile   Profile?  @relation(fields: [profileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Profile {
-  id          String    @id @db.VarChar
+  id          String    @id @default(uuid())
   userId      String?   @unique @db.VarChar
   first_name  String    @db.VarChar
   second_name String    @db.VarChar
@@ -57,7 +57,7 @@ model Profile {
 }
 
 model Question {
-  id          String  @id @db.VarChar
+  id          String  @id @default(uuid())
   testId      String? @unique @db.VarChar
   description String? @db.VarChar
   answer      String? @db.VarChar
@@ -65,7 +65,7 @@ model Question {
 }
 
 model Test {
-  id          String    @id @db.VarChar
+  id          String    @id @default(uuid())
   name        String    @db.VarChar
   description String?   @db.VarChar
   lectureId   String?   @unique @db.VarChar
@@ -75,29 +75,29 @@ model Test {
 }
 
 model User {
-  id         String      @id @db.VarChar
+  id         String      @id @default(uuid())
   email      String      @unique @db.VarChar
   password   String      @db.VarChar
-  role       userrole?
+  role       UserRole
   createdAt  DateTime?   @default(now()) @db.Timestamp(6)
   Instructor Instructor?
   Learner    Learner?
   Profile    Profile?
 }
 
-enum phonetype {
+enum Phonetype {
   HOME
   MOBILE
   OFFICE
 }
 
-enum subjecttype {
+enum SubjectType {
   BIOLOGY
   MATHS
   SOCIAL_SCIENCE
 }
 
-enum userrole {
+enum UserRole {
   ADMIN
   CLIENT
   GUEST

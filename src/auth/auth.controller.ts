@@ -1,28 +1,25 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   Res,
   UseGuards,
   Req,
   Put,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Profile, User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UpdatePasswordDto } from './dto/update-passoword.dto';
 import { SignUpDto } from './dto/sign-up-auth.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { GetUser } from 'src/utils/decorators';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('sign-up')
   async signUp(@Res() res: Response, @Body() dto: SignUpDto): Promise<void> {
@@ -36,10 +33,13 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  login(@Req() req: Request, @Res() res: Response): void {
+  async login(
+    @Res() res: Response,
+    @GetUser() user: User & { Profile: Profile }
+  ): Promise<void> {
     try {
-      const user = this.authService.login(req.user as User);
-      res.status(201).send(user);
+      const userFound = await this.authService.login(user);
+      res.status(201).send(userFound);
     } catch (error) {
       res.status(500).send(error);
     }
@@ -49,7 +49,7 @@ export class AuthController {
   async resetPassword(
     @Req() req: Request,
     @Res() res: Response,
-    @Body() dto: UpdatePasswordDto,
+    @Body() dto: UpdatePasswordDto
   ): Promise<void> {
     try {
       const user = await this.authService.updatePassword(dto);

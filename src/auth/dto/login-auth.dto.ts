@@ -8,11 +8,6 @@ export class LoginDto implements Omit<User, 'id' | 'createdAt' | 'role'> {
   @IsOptional()
   email: string;
 
-  @ApiPropertyOptional()
-  @IsString()
-  @IsOptional()
-  username: string;
-
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
