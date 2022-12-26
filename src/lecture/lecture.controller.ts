@@ -1,15 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+} from '@nestjs/common';
 import { LectureService } from './lecture.service';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { UpdateLectureDto } from './dto/update-lecture.dto';
+import { Response } from 'express';
+import { Success } from 'src/utils/dictionaries';
 
 @Controller('lecture')
 export class LectureController {
   constructor(private readonly lectureService: LectureService) {}
 
   @Post()
-  create(@Body() createLectureDto: CreateLectureDto) {
-    return this.lectureService.create(createLectureDto);
+  async create(
+    @Res() res: Response,
+    @Body() createLectureDto: CreateLectureDto,
+  ) {
+    try {
+      const lecture = this.lectureService.create(createLectureDto);
+      res.status(Success.GET_LECTURE.status).send(lecture);
+    } catch (error) {
+      res.status(Success.CREATE_LECTURE.status).send(Error.);
+    }
   }
 
   @Get()

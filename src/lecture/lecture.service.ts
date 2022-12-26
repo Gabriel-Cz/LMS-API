@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { UpdateLectureDto } from './dto/update-lecture.dto';
 
 @Injectable()
 export class LectureService {
+  constructor(private readonly prismaService: PrismaService) {}
+
   create(createLectureDto: CreateLectureDto) {
-    return 'This action adds a new lecture';
+    return this.prismaService.lecture.create({
+      data: { ...createLectureDto },
+    });
   }
 
-  findAll() {
-    return `This action returns all lecture`;
+  findAllForOne(personId: string) {
+    return this.prismaService.lecture.findMany({
+      OR: [{ learnerId: personId }, { instructorId: personId }],
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} lecture`;
+    return this.prismaService.lecture.findOne({
+      where: { id },
+    });
   }
 
   update(id: number, updateLectureDto: UpdateLectureDto) {
-    return `This action updates a #${id} lecture`;
+    return this.prismaService.lecture.findOne({
+      where: { id },
+      data: { ...updateLectureDto },
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} lecture`;
+    return this.prismaService.lecture.delete({
+      where: { id },
+    });
   }
 }
