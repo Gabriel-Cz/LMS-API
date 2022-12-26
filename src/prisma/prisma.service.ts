@@ -2,28 +2,27 @@ import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient
-implements OnModuleInit {
+export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
     super({
       log: [
         {
           emit: 'event',
-          level: 'query'
+          level: 'query',
         },
         {
           emit: 'event',
-          level: 'info'
+          level: 'info',
         },
         {
           emit: 'event',
-          level: 'warn'
+          level: 'warn',
         },
         {
           emit: 'event',
-          level: 'error'
+          level: 'error',
         },
-      ]
+      ],
     });
   }
 
