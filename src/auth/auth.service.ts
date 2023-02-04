@@ -39,23 +39,51 @@ export class AuthService {
     return user;
   }
 
-  async signUp(dto: SignUpDto): Promise<AuthResponse> {
-    const userExist = await this.prisma.user.findUnique({
+  async signUp({Profile, Phone, ...dto}: SignUpDto): Promise<AuthResponse> {
+    let user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
       },
-    });
-    if (userExist) {
+    }) || { id: undefined, role: null, password: null };
+
+    if (user.id) {
       throw new UserEmailRegisteredError('The email is already registered.');
     }
 
     const encryptedPassword = await this.bcryptService.getHash(dto.password);
-    const user = await this.prisma.user.create({
-      data: {
-        password: encryptedPassword,
-        ...SignUpDto
-      }
-    })
+    dto.password = encryptedPassword;
+
+    if (dto.role === 'LEARNER') {
+      user = this.userService.createLearner({ ...dto });
+    }
+    if (dto.role === 'INSTRUCTOR') {
+      user = this.userService.createInstructor({ ...dto });
+    }
+    else {
+      user = await this.prisma.user.create({
+        data: {
+          ...dto,
+          password: encryptedPassword,
+          Profile: {
+            create: {
+              ...Profile,
+              Phone: {
+                create: {
+                  ...Phone,
+                }
+              }
+            }
+          }
+        },
+        include: {
+          Profile: {
+            include: {
+              Phone: true
+            }
+          }
+        }
+      });
+    }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

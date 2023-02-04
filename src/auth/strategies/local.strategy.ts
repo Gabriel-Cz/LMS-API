@@ -2,19 +2,26 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { User } from 'src/modules/users/entities/user.entity';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthSerrvice) {
+  constructor(private authService: AuthService) {
     super();
   }
 
   async validate({ email, username, password }: any): Promise<User> {
-    const user: User;
-    if (email) await this.authService.validateUserWithEmail(email, password);
-    if (username) {
-      await this.authService.validateUserWithUsername(username, password);
+    let user: User = {
+      id: '',
+      email: '',
+      password: '',
+      role: 'ADMIN',
+      createdAt: undefined
+    };
+    if (email) {
+      user = await this.authService.validateUserWithEmail(email, password)
+    } else {
+      user = await this.authService.validateUserWithEmail(username, password)
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
