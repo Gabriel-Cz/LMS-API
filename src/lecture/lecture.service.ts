@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { Lecture } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { UpdateLectureDto } from './dto/update-lecture.dto';
 
 @Injectable()
 export class LectureService {
-  create(createLectureDto: CreateLectureDto) {
-    return 'This action adds a new lecture';
+  constructor(
+    private prismaService: PrismaService
+  ) {}
+
+  async create(createLectureDto: CreateLectureDto): Promise<Lecture> {
+    return this.prismaService.lecture.create({
+      data: { ...createLectureDto }
+    });
   }
 
-  findAll() {
-    return `This action returns all lecture`;
+  async findAll(): Promise<Lecture[]> {
+    return this.prismaService.lecture.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} lecture`;
+  async findOne(id: string): Promise<Lecture> {
+    return this.prismaService.lecture.findUnique({
+      where: {
+        id: id
+      }
+    });
   }
 
-  update(id: number, updateLectureDto: UpdateLectureDto) {
-    return `This action updates a #${id} lecture`;
+  async update(id: string, updateLectureDto: UpdateLectureDto): Promise<Lecture> {
+    return this.prismaService.lecture.update({
+      where: {
+        id: id
+      },
+      data: { ...updateLectureDto }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} lecture`;
+  async remove(id: string): Promise<Lecture> {
+    return this.prismaService.lecture.delete({
+      where: {
+        id: id
+      }
+    });
   }
 }
