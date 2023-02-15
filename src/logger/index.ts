@@ -27,7 +27,7 @@ export class CustomLogger extends ConsoleLogger {
     controller: string,
     handler: string,
     action: AuditAction,
-    resource?: AuditResource
+    resource?: AuditResource,
   ) {
     const user = req.user?.username || 'unauthenticated';
     if ((process.env.node_env = 'development')) {
@@ -42,8 +42,8 @@ export class CustomLogger extends ConsoleLogger {
             'controller-handler': `${controller}.${handler}`,
           },
           null,
-          2
-        )
+          2,
+        ),
       );
     }
   }
