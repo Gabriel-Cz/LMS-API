@@ -18,7 +18,7 @@ async function bootstrap(): Promise<void> {
       transformOptions: {
         enableImplicitConversion: true,
       },
-    })
+    }),
   );
   const config = new DocumentBuilder()
     .setTitle('LMS API')
