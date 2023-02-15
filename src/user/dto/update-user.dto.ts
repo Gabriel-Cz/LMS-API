@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import ProfileDto from './profile.dto';
-import { Type } from "class-transformer";
+import { Type } from 'class-transformer';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { User, UserRole } from '@prisma/client';
 import PhoneDto from './phone.dto';
