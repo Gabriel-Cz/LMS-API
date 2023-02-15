@@ -16,12 +16,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       email: '',
       password: '',
       role: 'ADMIN',
-      createdAt: undefined
+      createdAt: undefined,
     };
     if (email) {
-      user = await this.authService.validateUserWithEmail(email, password)
+      user = await this.authService.validateUserWithEmail(email, password);
     } else {
-      user = await this.authService.validateUserWithEmail(username, password)
+      user = await this.authService.validateUserWithEmail(username, password);
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

@@ -2,7 +2,13 @@ import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User, UserRole } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import PhoneDto from 'src/user/dto/phone.dto';
 import ProfileDto from 'src/user/dto/profile.dto';
 

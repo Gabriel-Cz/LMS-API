@@ -13,5 +13,5 @@ export class LoginResponse implements Omit<User, 'password'> {
   email: string;
   role: UserRole | null;
   createdAt: Date | null;
-  Profile: Profile
+  Profile: Profile;
 }

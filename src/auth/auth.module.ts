@@ -6,6 +6,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config/dist';
+import { LearnerService } from 'src/learner/learner.service';
+import { InstructorService } from 'src/instructor/instructor.service';
 
 @Module({
   imports: [
@@ -20,6 +22,12 @@ import { ConfigService } from '@nestjs/config/dist';
     ConfigModule.forRoot(),
   ],
   controllers: [AuthController],
-  providers: [AuthService, BcryptService, PrismaService],
+  providers: [
+    AuthService,
+    BcryptService,
+    PrismaService,
+    LearnerService,
+    InstructorService,
+  ],
 })
 export class AuthModule {}
