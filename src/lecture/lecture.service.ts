@@ -6,13 +6,11 @@ import { UpdateLectureDto } from './dto/update-lecture.dto';
 
 @Injectable()
 export class LectureService {
-  constructor(
-    private prismaService: PrismaService
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
   async create(createLectureDto: CreateLectureDto): Promise<Lecture> {
     return this.prismaService.lecture.create({
-      data: { ...createLectureDto }
+      data: { ...createLectureDto },
     });
   }
 
@@ -23,25 +21,28 @@ export class LectureService {
   async findOne(id: string): Promise<Lecture> {
     return this.prismaService.lecture.findUnique({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 
-  async update(id: string, updateLectureDto: UpdateLectureDto): Promise<Lecture> {
+  async update(
+    id: string,
+    updateLectureDto: UpdateLectureDto,
+  ): Promise<Lecture> {
     return this.prismaService.lecture.update({
       where: {
-        id: id
+        id: id,
       },
-      data: { ...updateLectureDto }
+      data: { ...updateLectureDto },
     });
   }
 
   async remove(id: string): Promise<Lecture> {
     return this.prismaService.lecture.delete({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 }

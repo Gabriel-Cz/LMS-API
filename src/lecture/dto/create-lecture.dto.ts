@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Lecture, SubjectType } from "@prisma/client";
-import { IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { Lecture, SubjectType } from '@prisma/client';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateLectureDto implements Omit<Lecture, 'id' | 'createdAt'> {
   @ApiProperty()
