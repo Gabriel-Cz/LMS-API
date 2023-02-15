@@ -12,7 +12,7 @@ class Response {
 class ApiResponse {
   status: number;
   description: string;
-  type?: Type<unknown> | Function | [Function] | string;
+  type?: Type<unknown> | any | [any] | string;
 }
 
 class ConstraintsError {

@@ -1,4 +1,4 @@
-import { ApiResponse } from "./entities/response.entity";
+import { ApiResponse } from './entities/response.entity';
 
 export class ControlledError extends Error {
   public errorResponse: ApiResponse;
